@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Link from 'next/link'
 
 import { INDEX_PATH } from '../../constants/paths'
@@ -5,6 +6,9 @@ import { INDEX_PATH } from '../../constants/paths'
 export const Custom404PageContent = () => {
   return (
     <div className='d-flex flex-column align-items-center justify-content-center min-vh-100'>
+      <Head>
+        <title>Not found!</title>
+      </Head>
       <h1 className='mb-3'>Page not found!</h1>
       <Link href={INDEX_PATH}>
         <a className='btn btn-dark p-3'>Go back to home page</a>
