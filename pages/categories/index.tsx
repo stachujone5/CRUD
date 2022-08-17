@@ -1,4 +1,4 @@
-import { CategoriesPageContent } from '../../components/page-contents/Categories'
+import { CategoriesPageContent } from '../../components/page-contents/CategoriesPageContent'
 
 const CategoriesPage = () => {
   return <CategoriesPageContent />

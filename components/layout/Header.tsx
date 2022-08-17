@@ -11,7 +11,7 @@ export const Header = () => {
   const iconClasses = 'bi d-block mx-auto mb-1'
 
   return (
-    <header>
+    <header className='position-fixed w-100'>
       <div className='px-3 py-2 text-bg-dark bg-dark'>
         <Container>
           <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
