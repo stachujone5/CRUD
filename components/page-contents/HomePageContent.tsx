@@ -17,7 +17,7 @@ export const HomePageContent = () => {
   }, [authorization])
 
   return (
-    <div className='d-flex flex-column align-items-center justify-content-center min-vh-100'>
+    <div className='text-center min-vh-100'>
       <Head>
         <title>Home</title>
       </Head>
