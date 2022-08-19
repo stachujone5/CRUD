@@ -1,5 +1,3 @@
-import { Container } from '../shared/Container'
-
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -10,7 +8,7 @@ export const Layout = ({ children }: Children) => {
     <>
       <Header />
       <main>
-        <Container>{children}</Container>
+        <div className='container'>{children}</div>
       </main>
       <Footer />
     </>

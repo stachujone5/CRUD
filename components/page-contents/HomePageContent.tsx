@@ -1,27 +1,16 @@
 import Head from 'next/head'
-import { useEffect } from 'react'
 
-import { API_URL } from '../../constants/api'
+import { Container } from '../shared/Container'
+import { LinkButton } from '../shared/LinkButton'
 
 export const HomePageContent = () => {
-  // eslint-disable-next-line -- it exists
-  const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION!
-
-  useEffect(() => {
-    fetch(`${API_URL}/api/219/product_categories`, {
-      mode: 'no-cors',
-      headers: {
-        Authorization: authorization
-      }
-    }).catch(err => console.log(err))
-  }, [authorization])
-
   return (
-    <div className='text-center min-vh-100'>
+    <Container>
       <Head>
         <title>Home</title>
       </Head>
-      <h1>Home page</h1>
-    </div>
+      <h1 className='mb-4'>GoPOS recruitment task</h1>
+      <LinkButton>Browse our products!</LinkButton>
+    </Container>
   )
 }

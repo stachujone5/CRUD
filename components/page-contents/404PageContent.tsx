@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import Link from 'next/link'
 
 import { INDEX_PATH } from '../../constants/paths'
+import { LinkButton } from '../shared/LinkButton'
 
 export const Custom404PageContent = () => {
   return (
@@ -10,9 +10,7 @@ export const Custom404PageContent = () => {
         <title>Not found!</title>
       </Head>
       <h1 className='mb-3'>Page not found!</h1>
-      <Link href={INDEX_PATH}>
-        <a className='btn btn-dark p-3'>Go back to home page</a>
-      </Link>
+      <LinkButton href={INDEX_PATH}>Go back to home page</LinkButton>
     </div>
   )
 }
