@@ -13,7 +13,7 @@ import type { Category } from '../../types'
 export const CategoriesPageContent = () => {
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
 
-  const { data, isError, isLoading } = useQuery(['categories'], () =>
+  const { data, isError } = useQuery(['categories'], () =>
     customFetch<{ readonly data: readonly Category[] }>(
       `${API_URL}/ajax/219/product_categories?userId=${authorization}`
     )
@@ -26,7 +26,6 @@ export const CategoriesPageContent = () => {
       <h1 className='mb-5'>Categories</h1>
       <div className='d-flex justify-content-center flex-wrap gap-4'>
         {isError && <Message className='text-danger'>Couldn't fetch categories!</Message>}
-        {isLoading && <Message className='text-primary'>Loading...</Message>}
         {data?.data.map(c => (
           <Card header={c.name} key={c.uid} href={`${CATEGORIES_PATH}/${c.id.toString()}`} />
         ))}

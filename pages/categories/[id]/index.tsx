@@ -1,5 +1,7 @@
+import { SingleCategoryPageContent } from '../../../components/page-contents/SingleCategoryPageContent'
+
 const CategoryIDPage = () => {
-  return <h1>cat lol</h1>
+  return <SingleCategoryPageContent />
 }
 
 export default CategoryIDPage

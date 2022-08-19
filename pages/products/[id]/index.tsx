@@ -1,5 +1,7 @@
+import { SingleProductPageContent } from '../../../components/page-contents/SingleProductPageContent'
+
 const ProductIDPage = () => {
-  return <h1>lool</h1>
+  return <SingleProductPageContent />
 }
 
 export default ProductIDPage
