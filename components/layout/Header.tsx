@@ -5,8 +5,9 @@ import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { BiCategory, BiCollection, BiHome } from 'react-icons/bi'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import { MdOutlineCreateNewFolder } from 'react-icons/md'
 
-import { CATEGORIES_PATH, INDEX_PATH, PRODUCTS_PATH } from '../../constants/paths'
+import { ADD_PATH, CATEGORIES_PATH, INDEX_PATH, PRODUCTS_PATH } from '../../constants/paths'
 import logo from '../../public/image.webp'
 
 export const Header = () => {
@@ -49,6 +50,17 @@ export const Header = () => {
                   <a className={clsx('nav-link', pathname === CATEGORIES_PATH && 'active')}>
                     <BiCollection style={{ width: 24, height: 24 }} className='bi d-lg-block mx-lg-auto mb-1 d-none' />
                     Categories
+                  </a>
+                </Link>
+              </li>
+              <li className='nav-link'>
+                <Link href={ADD_PATH}>
+                  <a className={clsx('nav-link', pathname === ADD_PATH && 'active')}>
+                    <MdOutlineCreateNewFolder
+                      style={{ width: 24, height: 24 }}
+                      className='bi d-lg-block mx-lg-auto mb-1 d-none'
+                    />
+                    Add
                   </a>
                 </Link>
               </li>

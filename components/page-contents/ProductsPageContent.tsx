@@ -1,48 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
 
-import { API_URL } from '../../constants/api'
 import { PRODUCTS_PATH } from '../../constants/paths'
-import { customFetch } from '../../helpers/fetch'
+import { useProducts } from '../../hooks/useProducts'
 import { Card } from '../shared/Card'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
-import type { Category, Product } from '../../types'
-
-interface EditedProduct {
-  readonly category: string
-  readonly id: string
-  readonly name: string
-}
-
 export const ProductsPageContent = () => {
-  const [editedProducts, setEditedProducts] = useState<readonly EditedProduct[]>([])
-
-  const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
-
-  const { data: products, isError: productsError } = useQuery(['products'], () =>
-    customFetch<{ readonly data: readonly Product[] }>(`${API_URL}/ajax/219/products?userId=${authorization}`)
-  )
-
-  const { data: categories, isError: categoriesError } = useQuery(['categories'], () =>
-    customFetch<{ readonly data: readonly Category[] }>(
-      `${API_URL}/ajax/219/product_categories?userId=${authorization}`
-    )
-  )
-
-  useEffect(() => {
-    if (!products || !categories) return
-
-    const newProducts = products.data.map(p => {
-      const pCategory = categories.data.find(c => c.id === p.category_id) ?? { name: 'Category not found' }
-
-      return { name: p.name, category: pCategory.name, id: p.id.toString() }
-    })
-
-    setEditedProducts(newProducts)
-  }, [products, categories])
+  const { isError, products } = useProducts()
 
   return (
     <Container>
@@ -51,8 +16,8 @@ export const ProductsPageContent = () => {
       </Head>
       <h1 className='mb-5'>Products</h1>
       <div className='d-flex justify-content-center flex-wrap gap-4'>
-        {(productsError || categoriesError) && <Message className='text-danger'>Couldn't fetch products!</Message>}
-        {editedProducts?.map(p => (
+        {isError && <Message className='text-danger'>Couldn't fetch products!</Message>}
+        {products?.map(p => (
           <Card key={p.id} text={p.category} header={p.name} href={`${PRODUCTS_PATH}/${p.id}`} />
         ))}
       </div>
