@@ -8,7 +8,7 @@ import type { Category } from '../types'
 export const useCategories = () => {
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
 
-  const { data, isError, refetch } = useQuery(['categories'], () =>
+  const { data, isError } = useQuery(['categories'], () =>
     customFetch<{ readonly data: readonly Category[] }>(
       `${API_URL}/ajax/219/product_categories?userId=${authorization}`
     )
@@ -16,5 +16,5 @@ export const useCategories = () => {
 
   const categories = data ? data.data : []
 
-  return { categories, isError, refetch }
+  return { categories, isError }
 }

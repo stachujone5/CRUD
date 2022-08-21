@@ -20,7 +20,7 @@ export const SingleCategoryPageContent = () => {
   const categoryInputRef = useRef<HTMLInputElement>(null)
 
   const { push, query } = useRouter()
-  const { categories, isError, refetch } = useCategories()
+  const { categories, isError } = useCategories()
   const [isCooldown, setIsCooldown] = useCooldown()
 
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
@@ -47,7 +47,6 @@ export const SingleCategoryPageContent = () => {
         setAlertMsg('Category edited!')
         setVariant('success')
         setIsCooldown()
-        void refetch()
         setTimeout(() => void push(CATEGORIES_PATH), 1500)
         console.log(res)
       })

@@ -1,7 +1,9 @@
+import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
+import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
 import { useProducts } from '../../hooks/useProducts'
 import { Container } from '../shared/Container'
@@ -17,12 +19,34 @@ export const SingleProductPageContent = () => {
   const productInputRef = useRef<HTMLInputElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
 
+  const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
   const currentProduct = products.find(p => p.id.toString() === id)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (!currentProduct) return
+
+    if (!productInputRef.current || !productSelectRef.current) return
+
     e.preventDefault()
+    axios
+      .put(
+        `${API_URL}/ajax/219/products/${id}?userId=${authorization}`,
+        {
+          ...currentProduct,
+          name: productInputRef.current.value,
+          categoryId: productSelectRef.current.value
+        },
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
   }
 
   return (
@@ -48,7 +72,7 @@ export const SingleProductPageContent = () => {
 
             <select className='form-select mb-3' defaultValue={currentProduct.category} ref={productSelectRef}>
               {categories.map(c => (
-                <option key={c.id} value={c.name}>
+                <option key={c.id} value={c.id}>
                   {c.name}
                 </option>
               ))}
