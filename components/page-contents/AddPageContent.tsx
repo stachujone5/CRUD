@@ -1,5 +1,4 @@
 import axios from 'axios'
-import clsx from 'clsx'
 import Head from 'next/head'
 import { useRef, useState } from 'react'
 
@@ -15,45 +14,49 @@ export const AddPageContent = () => {
   const categoriesInputRef = useRef<HTMLInputElement>(null)
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
 
-  const [isCategoryError, setIsCategoryError] = useState(false)
-  const [isProductError, setIsProductError] = useState(false)
+  const [error, setError] = useState('')
+  const [variant, setVariant] = useState<'success' | 'danger'>('success')
 
   const [isCooldown, setIsCooldown] = useCooldown()
 
-  const categoriesInputClasses = clsx('form-control', isCategoryError && 'border-danger')
-  const productsInputClasses = clsx('form-control', isProductError && 'border-danger')
-
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsProductError(false)
+    setError('')
 
-    if (!categoriesInputRef.current?.value) {
-      setIsProductError(true)
+    if (!productsInputRef.current?.value) {
+      setError('Value cannot be empty!')
+      setVariant('danger')
+      setIsCooldown()
       return
     }
 
     axios
       .post(`${API_URL}/ajax/219/product_categories/?userId=${authorization}`, {
-        name: categoriesInputRef.current.value
+        name: productsInputRef.current.value
       })
       .then(res => {
-        setIsProductError(false)
+        setError('Product added!')
+        setVariant('success')
         setIsCooldown()
         console.log(res)
       })
       .catch(err => {
-        setIsProductError(true)
+        setError('Something went wrong!')
+        setVariant('danger')
+        setIsCooldown()
         console.log(err)
       })
 
-    categoriesInputRef.current.value = ''
+    productsInputRef.current.value = ''
   }
   const handleCategorySubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsCategoryError(false)
+    setError('')
 
     if (!categoriesInputRef.current?.value) {
-      setIsCategoryError(true)
+      setError('Value cannot be empty!')
+      setVariant('danger')
+      setIsCooldown()
       return
     }
 
@@ -62,12 +65,15 @@ export const AddPageContent = () => {
         name: categoriesInputRef.current.value
       })
       .then(res => {
-        setIsCategoryError(false)
+        setError('Category added!')
+        setVariant('success')
         setIsCooldown()
         console.log(res)
       })
       .catch(err => {
-        setIsCategoryError(true)
+        setError('Something went wrong!')
+        setVariant('danger')
+        setIsCooldown()
         console.log(err)
       })
 
@@ -83,19 +89,23 @@ export const AddPageContent = () => {
 
       <div className='d-flex flex-wrap justify-content-center gap-5 mb-5'>
         <form onSubmit={handleProductSubmit}>
-          <input type='text' className={productsInputClasses} ref={productsInputRef} />
+          <input placeholder='Product' type='text' className='form-control' ref={productsInputRef} />
           <button type='submit' className='btn btn-primary px-5 mt-2'>
             Add product
           </button>
         </form>
         <form onSubmit={handleCategorySubmit}>
-          <input type='text' className={categoriesInputClasses} ref={categoriesInputRef} />
+          <input placeholder='Category' type='text' className='form-control' ref={categoriesInputRef} />
           <button type='submit' className='btn btn-primary px-5 mt-2'>
             Add category
           </button>
         </form>
       </div>
-      {isCooldown && <Alert className='w-50 mx-auto'>Success</Alert>}
+      {isCooldown && (
+        <Alert className='w-50 mx-auto' variant={variant}>
+          {error}
+        </Alert>
+      )}
     </Container>
   )
 }
