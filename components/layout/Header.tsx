@@ -15,6 +15,8 @@ export const Header = () => {
   const collapseRef = useRef<HTMLDivElement>(null)
   const { pathname } = useRouter()
 
+  const collapseClasses = clsx('navbar-collapse ms-lg-5', !isOpen && 'd-none')
+
   return (
     <header style={{ marginBottom: 100 }}>
       <nav className='navbar navbar-expand-lg navbar-light bg-light px-2 overflow-hidden'>
@@ -27,7 +29,7 @@ export const Header = () => {
           <button className='navbar-toggler' aria-label='Toggle navigation' onClick={() => setIsOpen(prev => !prev)}>
             <GiHamburgerMenu className='navbar-toggler-icon' />
           </button>
-          <div className='navbar-collapse ms-lg-5'>
+          <div className={collapseClasses}>
             <ul className='navbar-nav flex-row justify-content-center gap-2 me-lg-auto mb-lg-0'>
               <li className='nav-link'>
                 <Link href={INDEX_PATH}>

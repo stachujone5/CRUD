@@ -14,17 +14,17 @@ export const AddPageContent = () => {
   const categoriesInputRef = useRef<HTMLInputElement>(null)
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
 
-  const [error, setError] = useState('')
+  const [alertMsg, setAlertMsg] = useState('')
   const [variant, setVariant] = useState<'success' | 'danger'>('success')
 
   const [isCooldown, setIsCooldown] = useCooldown()
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError('')
+    setAlertMsg('')
 
     if (!productsInputRef.current?.value) {
-      setError('Value cannot be empty!')
+      setAlertMsg('Value cannot be empty!')
       setVariant('danger')
       setIsCooldown()
       return
@@ -35,13 +35,13 @@ export const AddPageContent = () => {
         name: productsInputRef.current.value
       })
       .then(res => {
-        setError('Product added!')
+        setAlertMsg('Product added!')
         setVariant('success')
         setIsCooldown()
         console.log(res)
       })
       .catch(err => {
-        setError('Something went wrong!')
+        setAlertMsg('Something went wrong!')
         setVariant('danger')
         setIsCooldown()
         console.log(err)
@@ -51,10 +51,10 @@ export const AddPageContent = () => {
   }
   const handleCategorySubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError('')
+    setAlertMsg('')
 
     if (!categoriesInputRef.current?.value) {
-      setError('Value cannot be empty!')
+      setAlertMsg('Value cannot be empty!')
       setVariant('danger')
       setIsCooldown()
       return
@@ -65,13 +65,13 @@ export const AddPageContent = () => {
         name: categoriesInputRef.current.value
       })
       .then(res => {
-        setError('Category added!')
+        setAlertMsg('Category added!')
         setVariant('success')
         setIsCooldown()
         console.log(res)
       })
       .catch(err => {
-        setError('Something went wrong!')
+        setAlertMsg('Something went wrong!')
         setVariant('danger')
         setIsCooldown()
         console.log(err)
@@ -86,16 +86,21 @@ export const AddPageContent = () => {
         <title>Add</title>
       </Head>
       <h1 className='mb-5'>Add product or category</h1>
-
       <div className='d-flex flex-wrap justify-content-center gap-5 mb-5'>
         <form onSubmit={handleProductSubmit}>
-          <input placeholder='Product' type='text' className='form-control' ref={productsInputRef} />
+          <div className='form-floating mb-3 text-start'>
+            <input className='form-control' id='product' placeholder='Product' ref={productsInputRef} />
+            <label htmlFor='product'>Add product</label>
+          </div>
           <button type='submit' className='btn btn-primary px-5 mt-2'>
             Add product
           </button>
         </form>
         <form onSubmit={handleCategorySubmit}>
-          <input placeholder='Category' type='text' className='form-control' ref={categoriesInputRef} />
+          <div className='form-floating mb-3 text-start'>
+            <input className='form-control' id='category' placeholder='Category' ref={categoriesInputRef} />
+            <label htmlFor='category'>Add category</label>
+          </div>
           <button type='submit' className='btn btn-primary px-5 mt-2'>
             Add category
           </button>
@@ -103,7 +108,7 @@ export const AddPageContent = () => {
       </div>
       {isCooldown && (
         <Alert className='w-50 mx-auto' variant={variant}>
-          {error}
+          {alertMsg}
         </Alert>
       )}
     </Container>

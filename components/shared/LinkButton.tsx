@@ -11,7 +11,7 @@ interface Props extends Children {
 }
 
 export const LinkButton = ({ children, className, href = INDEX_PATH }: Props) => {
-  const classes = clsx('btn btn-dark p-3', className)
+  const classes = clsx('btn btn-primary p-3', className)
 
   return (
     <Link href={href}>

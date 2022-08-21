@@ -1,11 +1,10 @@
-export const customFetch = async <ResponseData>(path: string) => {
-  const res = await fetch(path)
+import axios from 'axios'
 
-  if (!res.ok) {
+export const customFetch = async <ResponseData>(path: string) => {
+  try {
+    const res = await axios.get<ResponseData>(path)
+    return res.data
+  } catch (err) {
     throw new Error('Failed to fetch')
   }
-
-  const data: ResponseData = await res.json()
-
-  return data
 }
