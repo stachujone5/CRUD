@@ -21,13 +21,12 @@ export const EditCategoryPageContent = () => {
 
   const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
     successMsg: 'Category edited',
-    errrorMsg: 'This name already exists!',
-    path: `${API_URL}/ajax/219/product_categories/${id}`
+    errrorMsg: 'This name already exists!'
   })
 
   const currentCategory = categories.find(c => c.id.toString() === id)
 
-  const handleCategoryEdit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!categoryInputRef.current?.value) {
@@ -37,7 +36,7 @@ export const EditCategoryPageContent = () => {
       return
     }
 
-    update({
+    update(`${API_URL}/ajax/219/product_categories/${id}`, {
       name: categoryInputRef.current.value
     })
   }
@@ -51,7 +50,7 @@ export const EditCategoryPageContent = () => {
       {currentCategory && (
         <>
           <h1 className='mb-5'>Edit category</h1>
-          <form className='mx-auto' style={{ maxWidth: '18rem' }} onSubmit={handleCategoryEdit}>
+          <form className='mx-auto' style={{ maxWidth: '18rem' }} onSubmit={handleSubmit}>
             <div className='form-floating mb-3 text-start'>
               <input
                 className='form-control'

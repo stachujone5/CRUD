@@ -24,8 +24,7 @@ export const EditProductPageContent = () => {
 
   const { alertMsg, isCooldown, update, variant } = useUpdateProducts({
     errrorMsg: 'This name already exists!',
-    successMsg: 'Product edited',
-    path: `${API_URL}/ajax/219/products/${id}`
+    successMsg: 'Product edited'
   })
 
   const currentProduct = products.find(p => p.id.toString() === id)
@@ -33,14 +32,15 @@ export const EditProductPageContent = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (!currentProduct || !productInputRef.current || !productSelectRef.current) return
 
-    update({
+    e.preventDefault()
+
+    update(`${API_URL}/ajax/219/products/${id}`, {
       measure_type: currentProduct.measure_type,
       type: currentProduct.type,
       tax_id: currentProduct.tax_id,
       name: productInputRef.current.value,
       category_id: productSelectRef.current.value
     })
-    e.preventDefault()
   }
 
   return (
