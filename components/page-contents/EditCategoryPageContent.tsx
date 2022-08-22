@@ -1,31 +1,29 @@
-import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
-import { CATEGORIES_PATH } from '../../constants/paths'
 import { useCategories } from '../../hooks/useCategories'
-import { useCooldown } from '../../hooks/useCooldown'
+import { useUpdateProducts } from '../../hooks/useUpdateProducts'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
 import type { FormEvent } from 'react'
 
-export const SingleCategoryPageContent = () => {
-  const [alertMsg, setAlertMsg] = useState('')
-  const [variant, setVariant] = useState<'success' | 'danger'>('success')
-
+export const EditCategoryPageContent = () => {
   const categoryInputRef = useRef<HTMLInputElement>(null)
 
-  const { push, query } = useRouter()
+  const { query } = useRouter()
   const { categories, isError } = useCategories()
-  const [isCooldown, setIsCooldown] = useCooldown()
-
-  const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
+
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
+    successMsg: 'Category edited',
+    errrorMsg: 'This name already exists!',
+    path: `${API_URL}/ajax/219/product_categories/${id}`
+  })
 
   const currentCategory = categories.find(c => c.id.toString() === id)
 
@@ -33,29 +31,15 @@ export const SingleCategoryPageContent = () => {
     e.preventDefault()
 
     if (!categoryInputRef.current?.value) {
-      setAlertMsg('Value cannot be empty!')
+      setAlertMsg('Name cannot be empty!')
       setVariant('danger')
       setIsCooldown()
       return
     }
 
-    axios
-      .put(`${API_URL}/ajax/219/product_categories/${currentCategory?.id}/?userId=${authorization}`, {
-        name: categoryInputRef.current.value
-      })
-      .then(res => {
-        setAlertMsg('Category edited!')
-        setVariant('success')
-        setIsCooldown()
-        setTimeout(() => void push(CATEGORIES_PATH), 1500)
-        console.log(res)
-      })
-      .catch(err => {
-        setAlertMsg('Something went wrong!')
-        setVariant('danger')
-        setIsCooldown()
-        console.log(err)
-      })
+    update({
+      name: categoryInputRef.current.value
+    })
   }
 
   return (
@@ -76,7 +60,7 @@ export const SingleCategoryPageContent = () => {
                 ref={categoryInputRef}
                 defaultValue={currentCategory.name}
               />
-              <label htmlFor='name'>Edit category</label>
+              <label htmlFor='name'>Category name</label>
             </div>
             <button className='btn btn-primary'>Submit</button>
           </form>

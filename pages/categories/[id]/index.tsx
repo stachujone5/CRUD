@@ -1,7 +1,7 @@
-import { SingleCategoryPageContent } from '../../../components/page-contents/SingleCategoryPageContent'
+import { EditCategoryPageContent } from '../../../components/page-contents/EditCategoryPageContent'
 
 const CategoryIDPage = () => {
-  return <SingleCategoryPageContent />
+  return <EditCategoryPageContent />
 }
 
 export default CategoryIDPage

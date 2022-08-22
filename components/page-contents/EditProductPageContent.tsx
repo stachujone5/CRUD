@@ -1,70 +1,46 @@
-import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
-import { useCooldown } from '../../hooks/useCooldown'
 import { useProducts } from '../../hooks/useProducts'
+import { useUpdateProducts } from '../../hooks/useUpdateProducts'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
 import type { FormEvent } from 'react'
 
-export const SingleProductPageContent = () => {
-  const [variant, setVariant] = useState<'success' | 'danger'>('success')
-  const [alertMsg, setAlertMsg] = useState('')
+export const EditProductPageContent = () => {
+  const productInputRef = useRef<HTMLInputElement>(null)
+  const productSelectRef = useRef<HTMLSelectElement>(null)
 
   const { isError, products } = useProducts()
   const { categories } = useCategories()
   const { query } = useRouter()
-  const [isCooldown, setIsCooldown] = useCooldown()
 
-  const productInputRef = useRef<HTMLInputElement>(null)
-  const productSelectRef = useRef<HTMLSelectElement>(null)
-
-  const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
+
+  const { alertMsg, isCooldown, update, variant } = useUpdateProducts({
+    errrorMsg: 'This name already exists!',
+    successMsg: 'Product edited',
+    path: `${API_URL}/ajax/219/products/${id}`
+  })
 
   const currentProduct = products.find(p => p.id.toString() === id)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (!currentProduct) return
+    if (!currentProduct || !productInputRef.current || !productSelectRef.current) return
 
-    if (!productInputRef.current || !productSelectRef.current) return
-
+    update({
+      measure_type: currentProduct.measure_type,
+      type: currentProduct.type,
+      tax_id: currentProduct.tax_id,
+      name: productInputRef.current.value,
+      category_id: productSelectRef.current.value
+    })
     e.preventDefault()
-    axios
-      .put(
-        `${API_URL}/ajax/219/products/${id}?userId=${authorization}`,
-        {
-          measure_type: 'KILOGRAM',
-          type: 'BASIC',
-          tax_id: 1,
-          name: productInputRef.current.value,
-          category_id: productSelectRef.current.value
-        },
-        {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(res => {
-        setIsCooldown()
-        setVariant('success')
-        setAlertMsg('Product edited!')
-        console.log(res)
-      })
-      .catch(err => {
-        setIsCooldown()
-        setVariant('danger')
-        setAlertMsg('Something went wrong!')
-        console.log(err)
-      })
   }
 
   return (
@@ -88,9 +64,9 @@ export const SingleProductPageContent = () => {
               <label htmlFor='name'>Edit product</label>
             </div>
 
-            <select className='form-select mb-3' defaultValue={currentProduct.category} ref={productSelectRef}>
+            <select className='form-select mb-3' ref={productSelectRef}>
               {categories.map(c => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.id} selected={c.id === currentProduct.category_id}>
                   {c.name}
                 </option>
               ))}

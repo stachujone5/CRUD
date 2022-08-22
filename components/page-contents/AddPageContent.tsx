@@ -8,6 +8,7 @@ import { useCooldown } from '../../hooks/useCooldown'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 
+import type { AxiosError } from 'axios'
 import type { FormEvent } from 'react'
 
 export const AddPageContent = () => {
@@ -61,10 +62,14 @@ export const AddPageContent = () => {
         setIsCooldown()
         console.log(res)
       })
-      .catch(err => {
-        setAlertMsg('Something went wrong!')
-        setVariant('danger')
+      .catch((err: AxiosError) => {
         setIsCooldown()
+        setVariant('danger')
+        if (err.response?.status === 422) {
+          setAlertMsg('This name already exists!')
+          return
+        }
+        setAlertMsg('Something went wrong!')
         console.log(err)
       })
 
@@ -92,11 +97,15 @@ export const AddPageContent = () => {
         setIsCooldown()
         console.log(res)
       })
-      .catch(err => {
-        setAlertMsg('Something went wrong!')
-        setVariant('danger')
-        setIsCooldown()
+      .catch((err: AxiosError) => {
         console.log(err)
+        setIsCooldown()
+        setVariant('danger')
+        if (err.response?.status === 422) {
+          setAlertMsg('This name already exists!')
+          return
+        }
+        setAlertMsg('Something went wrong!')
       })
 
     categoryInputRef.current.value = ''
