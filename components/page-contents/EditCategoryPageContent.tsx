@@ -29,6 +29,13 @@ export const EditCategoryPageContent = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    if (categoryInputRef.current?.value === currentCategory?.name) {
+      setAlertMsg('Update category info!')
+      setVariant('danger')
+      setIsCooldown()
+      return
+    }
+
     if (!categoryInputRef.current?.value) {
       setAlertMsg('Name cannot be empty!')
       setVariant('danger')
@@ -36,8 +43,11 @@ export const EditCategoryPageContent = () => {
       return
     }
 
-    update(`${API_URL}/ajax/219/product_categories/${id}`, {
-      name: categoryInputRef.current.value
+    update({
+      path: `${API_URL}/ajax/219/product_categories/${id}`,
+      body: {
+        name: categoryInputRef.current.value
+      }
     })
   }
 

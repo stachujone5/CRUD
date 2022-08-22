@@ -18,8 +18,7 @@ export const AddPageContent = () => {
 
   const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
     errrorMsg: 'This name already exists!',
-    successMsg: 'Success',
-    method: 'post'
+    successMsg: 'Success'
   })
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -43,14 +42,18 @@ export const AddPageContent = () => {
       return
     }
 
-    update(`${API_URL}/ajax/219/products`, {
-      name: productInputRef.current.value,
-      recipe_amount: 1,
-      type: 'BASIC',
-      status: 'ENABLED',
-      measure_type: 'KILOGRAM',
-      category_id: category.id,
-      tax_id: 1
+    update({
+      path: `${API_URL}/ajax/219/products`,
+      body: {
+        name: productInputRef.current.value,
+        recipe_amount: 1,
+        type: 'BASIC',
+        status: 'ENABLED',
+        measure_type: 'KILOGRAM',
+        category_id: category.id,
+        tax_id: 1
+      },
+      method: 'post'
     })
 
     productInputRef.current.value = ''
@@ -66,8 +69,12 @@ export const AddPageContent = () => {
       return
     }
 
-    update(`${API_URL}/ajax/219/product_categories`, {
-      name: categoryInputRef.current.value
+    update({
+      path: `${API_URL}/ajax/219/product_categories`,
+      body: {
+        name: categoryInputRef.current.value
+      },
+      method: 'post'
     })
 
     categoryInputRef.current.value = ''

@@ -22,7 +22,7 @@ export const EditProductPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { alertMsg, isCooldown, update, variant } = useUpdateProducts({
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
     errrorMsg: 'This name already exists!',
     successMsg: 'Product edited'
   })
@@ -30,16 +30,36 @@ export const EditProductPageContent = () => {
   const currentProduct = products.find(p => p.id.toString() === id)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (!currentProduct || !productInputRef.current || !productSelectRef.current) return
+    if (!currentProduct || !productSelectRef.current) return
 
     e.preventDefault()
 
-    update(`${API_URL}/ajax/219/products/${id}`, {
-      measure_type: currentProduct.measure_type,
-      type: currentProduct.type,
-      tax_id: currentProduct.tax_id,
-      name: productInputRef.current.value,
-      category_id: productSelectRef.current.value
+    if (
+      productInputRef.current?.value === currentProduct.name &&
+      productSelectRef.current.value === currentProduct.category_id.toString()
+    ) {
+      setAlertMsg('Update product info!')
+      setVariant('danger')
+      setIsCooldown()
+      return
+    }
+
+    if (!productInputRef.current?.value) {
+      setAlertMsg('Name cannot be empty!')
+      setVariant('danger')
+      setIsCooldown()
+      return
+    }
+
+    update({
+      path: `${API_URL}/ajax/219/products/${id}`,
+      body: {
+        measure_type: currentProduct.measure_type,
+        type: currentProduct.type,
+        tax_id: currentProduct.tax_id,
+        name: productInputRef.current.value,
+        category_id: productSelectRef.current.value
+      }
     })
   }
 
@@ -52,7 +72,7 @@ export const EditProductPageContent = () => {
       {currentProduct && (
         <>
           <h1 className='mb-5'>Edit product</h1>
-          <form onSubmit={handleSubmit} className='mx-auto' style={{ maxWidth: '18rem' }}>
+          <form onSubmit={handleSubmit} className='mx-auto' style={{ maxWidth: '22rem' }}>
             <div className='form-floating mb-3 text-start'>
               <input
                 className='form-control'

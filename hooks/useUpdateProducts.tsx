@@ -7,11 +7,16 @@ import type { AxiosError } from 'axios'
 
 interface Props {
   readonly errrorMsg: string
-  readonly method?: 'post' | 'put'
   readonly successMsg: string
 }
 
-export const useUpdateProducts = ({ errrorMsg, method = 'put', successMsg }: Props) => {
+interface UpdateProps {
+  readonly body: { readonly [key: string]: any }
+  readonly method?: 'post' | 'put'
+  readonly path: string
+}
+
+export const useUpdateProducts = ({ errrorMsg, successMsg }: Props) => {
   const [isCooldown, setIsCooldown] = useCooldown()
   const [variant, setVariant] = useState<'success' | 'danger'>('success')
   const [alertMsg, setAlertMsg] = useState('')
@@ -19,7 +24,7 @@ export const useUpdateProducts = ({ errrorMsg, method = 'put', successMsg }: Pro
   // eslint-disable-next-line -- it exists
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION!
 
-  const update = (path: string, body: { readonly [key: string]: any }) => {
+  const update = ({ body, method = 'put', path }: UpdateProps) => {
     axios[method](path, body, {
       headers: { Authorization: authorization }
     })
