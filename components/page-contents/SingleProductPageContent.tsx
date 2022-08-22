@@ -18,7 +18,7 @@ export const SingleProductPageContent = () => {
   return (
     <Container>
       <Head>
-        <title>Edit product</title>
+        <title>{currentProduct?.name}</title>
       </Head>
       {isError && <Message className='text-danger'>Couldn't fetch product!</Message>}
       {currentProduct && (

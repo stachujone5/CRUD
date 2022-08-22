@@ -18,7 +18,7 @@ export const SingleCategoryPageContent = () => {
   return (
     <Container>
       <Head>
-        <title>Edit product</title>
+        <title>{currentCategory?.name}</title>
       </Head>
       {isError && <Message className='text-danger'>Couldn't fetch product!</Message>}
       {currentCategory && (

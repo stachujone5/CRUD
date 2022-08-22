@@ -16,7 +16,7 @@ export const AddPageContent = () => {
 
   const { categories } = useCategories()
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate('Success')
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate()
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -50,7 +50,8 @@ export const AddPageContent = () => {
         category_id: category.id,
         tax_id: 1
       },
-      method: 'post'
+      method: 'post',
+      successMsg: 'Product added!'
     })
 
     productInputRef.current.value = ''
@@ -71,7 +72,8 @@ export const AddPageContent = () => {
       body: {
         name: categoryInputRef.current.value
       },
-      method: 'post'
+      method: 'post',
+      successMsg: 'Category added!'
     })
 
     categoryInputRef.current.value = ''

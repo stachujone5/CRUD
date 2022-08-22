@@ -9,13 +9,14 @@ interface UpdateProps {
   readonly body?: { readonly [key: string]: any }
   readonly method?: 'post' | 'put' | 'delete'
   readonly path: string
+  readonly successMsg?: string
 }
 
 const NAME_TOO_LONG_ERROR_MSG = 'constraints.maxLength'
 const NAME_TAKEN_PRODUCT_ERROR_MSG = 'product_with_name_exists'
 const NAME_TAKEN_CATEGORY_ERROR_MSG = 'constraints.nameIsUnique'
 
-export const useUpdate = (successMsg: string) => {
+export const useUpdate = () => {
   const [isCooldown, setIsCooldown] = useCooldown()
   const [variant, setVariant] = useState<'success' | 'danger'>('success')
   const [alertMsg, setAlertMsg] = useState('')
@@ -23,7 +24,14 @@ export const useUpdate = (successMsg: string) => {
   // eslint-disable-next-line -- it exists
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION!
 
-  const update = ({ body, method = 'put', path }: UpdateProps) => {
+  const update = ({
+    body = {
+      headers: { Authorization: authorization }
+    },
+    method = 'put',
+    successMsg = 'Success',
+    path
+  }: UpdateProps) => {
     axios[method](path, body, {
       headers: { Authorization: authorization }
     })

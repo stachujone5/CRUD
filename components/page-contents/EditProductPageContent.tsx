@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
+import { PRODUCTS_PATH } from '../../constants/paths'
 import { useCategories } from '../../hooks/useCategories'
 import { useProducts } from '../../hooks/useProducts'
 import { useUpdate } from '../../hooks/useUpdate'
@@ -16,10 +17,10 @@ export const EditProductPageContent = () => {
   const productInputRef = useRef<HTMLInputElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate('Product edited!')
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate()
   const { categories } = useCategories()
   const { isError, products } = useProducts()
-  const { query } = useRouter()
+  const { push, query } = useRouter()
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
@@ -31,7 +32,7 @@ export const EditProductPageContent = () => {
     e.preventDefault()
 
     if (
-      productInputRef.current?.value === currentProduct.name &&
+      productInputRef.current?.value.trim() === currentProduct.name &&
       productSelectRef.current.value === currentProduct.category_id.toString()
     ) {
       setAlertMsg('Update product info!')
@@ -55,8 +56,18 @@ export const EditProductPageContent = () => {
         tax_id: currentProduct.tax_id,
         name: productInputRef.current.value,
         category_id: productSelectRef.current.value
-      }
+      },
+      successMsg: 'Product edited!'
     })
+  }
+
+  const handleDelete = () => {
+    update({
+      path: `${API_URL}/ajax/219/products/${id}`,
+      method: 'delete',
+      successMsg: 'Product deleted, redirecting...'
+    })
+    setTimeout(() => void push(PRODUCTS_PATH), 1000)
   }
 
   return (
@@ -87,9 +98,14 @@ export const EditProductPageContent = () => {
                 </option>
               ))}
             </select>
-            <button type='submit' className='px-5 btn btn-primary'>
-              Submit
-            </button>
+            <div className='d-flex justify-content-center gap-2'>
+              <button type='submit' className='px-5 btn btn-primary'>
+                Submit
+              </button>
+              <button type='button' onClick={handleDelete} className='px-5 btn btn-primary'>
+                Delete
+              </button>
+            </div>
           </form>
         </>
       )}
