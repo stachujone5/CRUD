@@ -43,5 +43,5 @@ export const useProducts = () => {
 
     setEditedProducts(newProducts)
   }, [products, categories, categoriesError, productsError])
-  return { products: editedProducts, setProducts: setEditedProducts, isError }
+  return { products: editedProducts, isError }
 }

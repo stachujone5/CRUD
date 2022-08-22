@@ -1,20 +1,26 @@
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
+import { useCooldown } from '../../hooks/useCooldown'
 import { useProducts } from '../../hooks/useProducts'
+import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
 import type { FormEvent } from 'react'
 
 export const SingleProductPageContent = () => {
+  const [variant, setVariant] = useState<'success' | 'danger'>('success')
+  const [alertMsg, setAlertMsg] = useState('')
+
   const { isError, products } = useProducts()
   const { categories } = useCategories()
   const { query } = useRouter()
+  const [isCooldown, setIsCooldown] = useCooldown()
 
   const productInputRef = useRef<HTMLInputElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
@@ -34,9 +40,11 @@ export const SingleProductPageContent = () => {
       .put(
         `${API_URL}/ajax/219/products/${id}?userId=${authorization}`,
         {
-          ...currentProduct,
+          measure_type: 'KILOGRAM',
+          type: 'BASIC',
+          tax_id: 1,
           name: productInputRef.current.value,
-          categoryId: productSelectRef.current.value
+          category_id: productSelectRef.current.value
         },
         {
           headers: {
@@ -45,8 +53,18 @@ export const SingleProductPageContent = () => {
           }
         }
       )
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+      .then(res => {
+        setIsCooldown()
+        setVariant('success')
+        setAlertMsg('Product edited!')
+        console.log(res)
+      })
+      .catch(err => {
+        setIsCooldown()
+        setVariant('danger')
+        setAlertMsg('Something went wrong!')
+        console.log(err)
+      })
   }
 
   return (
@@ -82,6 +100,11 @@ export const SingleProductPageContent = () => {
             </button>
           </form>
         </>
+      )}
+      {isCooldown && (
+        <Alert className='w-50 mx-auto mt-4' variant={variant}>
+          {alertMsg}
+        </Alert>
       )}
     </Container>
   )
