@@ -3,7 +3,7 @@ import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
-import { useUpdateProducts } from '../../hooks/useUpdateProducts'
+import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 
@@ -16,10 +16,7 @@ export const AddPageContent = () => {
 
   const { categories } = useCategories()
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
-    errrorMsg: 'This name already exists!',
-    successMsg: 'Success'
-  })
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate('Success')
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

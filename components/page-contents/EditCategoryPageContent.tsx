@@ -4,7 +4,7 @@ import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
-import { useUpdateProducts } from '../../hooks/useUpdateProducts'
+import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
@@ -19,10 +19,8 @@ export const EditCategoryPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
-    successMsg: 'Category edited',
-    errrorMsg: 'This name already exists!'
-  })
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } =
+    useUpdate('Category edited!')
 
   const currentCategory = categories.find(c => c.id.toString() === id)
 

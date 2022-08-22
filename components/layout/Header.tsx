@@ -2,25 +2,38 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { BiCategory, BiCollection, BiHome } from 'react-icons/bi'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { MdOutlineCreateNewFolder } from 'react-icons/md'
 
 import { ADD_PATH, CATEGORIES_PATH, INDEX_PATH, PRODUCTS_PATH } from '../../constants/paths'
+import { useProducts } from '../../hooks/useProducts'
 import logo from '../../public/image.webp'
+
+import type { ChangeEvent } from 'react'
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const collapseRef = useRef<HTMLDivElement>(null)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [inputValue, setInputValue] = useState('')
+
+  const { products } = useProducts()
   const { pathname } = useRouter()
+  const matchingProducs = inputValue
+    ? products.filter(p => p.name.toLowerCase().includes(inputValue.toLowerCase()))
+    : []
 
   const collapseClasses = clsx('navbar-collapse ms-lg-5', !isOpen && 'd-none')
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
+  }
+
   return (
     <header style={{ marginBottom: 100 }}>
-      <nav className='navbar navbar-expand-lg navbar-light bg-light px-2 overflow-hidden'>
-        <div className='container-fluid' ref={collapseRef}>
+      <nav className='navbar navbar-expand-lg navbar-light bg-light px-2 overflow-hidden overflow-visible'>
+        <div className='container-fluid'>
           <Link href={INDEX_PATH}>
             <div style={{ width: '50%', maxWidth: '150px', cursor: 'pointer' }}>
               <Image src={logo} alt='GoPOS logo' />
@@ -67,8 +80,32 @@ export const Header = () => {
                 </Link>
               </li>
             </ul>
-            <div>
-              <input className='form-control me-2' type='search' placeholder='Search' aria-label='Search' />
+            <div className='position-relative'>
+              <input
+                className='form-control me-2'
+                type='search'
+                placeholder='Search products'
+                aria-label='Search products'
+                onChange={handleInputChange}
+                onFocus={() => setIsSearchOpen(true)}
+                onBlur={() =>
+                  setTimeout(() => {
+                    setIsSearchOpen(false)
+                  }, 200)
+                }
+                value={inputValue}
+              />
+              {isSearchOpen && (
+                <ul className='position-absolute list-group w-100 mt-2'>
+                  {matchingProducs.map(p => (
+                    <Link key={p.id} href={`${PRODUCTS_PATH}/${p.id}`}>
+                      <a className='d-block list-group-item' onClick={() => setInputValue('')}>
+                        {p.name}
+                      </a>
+                    </Link>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>

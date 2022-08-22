@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
 import { useProducts } from '../../hooks/useProducts'
-import { useUpdateProducts } from '../../hooks/useUpdateProducts'
+import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
@@ -16,16 +16,12 @@ export const EditProductPageContent = () => {
   const productInputRef = useRef<HTMLInputElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
 
-  const { isError, products } = useProducts()
+  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate('Product edited!')
   const { categories } = useCategories()
+  const { isError, products } = useProducts()
   const { query } = useRouter()
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
-
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdateProducts({
-    errrorMsg: 'This name already exists!',
-    successMsg: 'Product edited'
-  })
 
   const currentProduct = products.find(p => p.id.toString() === id)
 

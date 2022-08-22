@@ -1,7 +1,7 @@
-import { EditProductPageContent } from '../../../components/page-contents/EditProductPageContent'
+import { SingleProductPageContent } from '../../../components/page-contents/SingleProductPageContent'
 
 const ProductIDPage = () => {
-  return <EditProductPageContent />
+  return <SingleProductPageContent />
 }
 
 export default ProductIDPage

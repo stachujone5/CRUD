@@ -5,18 +5,17 @@ import { useCooldown } from './useCooldown'
 
 import type { AxiosError } from 'axios'
 
-interface Props {
-  readonly errrorMsg: string
-  readonly successMsg: string
-}
-
 interface UpdateProps {
-  readonly body: { readonly [key: string]: any }
-  readonly method?: 'post' | 'put'
+  readonly body?: { readonly [key: string]: any }
+  readonly method?: 'post' | 'put' | 'delete'
   readonly path: string
 }
 
-export const useUpdateProducts = ({ errrorMsg, successMsg }: Props) => {
+const NAME_TOO_LONG_ERROR_MSG = 'constraints.maxLength'
+const NAME_TAKEN_PRODUCT_ERROR_MSG = 'product_with_name_exists'
+const NAME_TAKEN_CATEGORY_ERROR_MSG = 'constraints.nameIsUnique'
+
+export const useUpdate = (successMsg: string) => {
   const [isCooldown, setIsCooldown] = useCooldown()
   const [variant, setVariant] = useState<'success' | 'danger'>('success')
   const [alertMsg, setAlertMsg] = useState('')
@@ -34,11 +33,17 @@ export const useUpdateProducts = ({ errrorMsg, successMsg }: Props) => {
         setAlertMsg(successMsg)
         console.log(res)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: AxiosError<{ readonly errors: readonly [{ readonly message: string }] }>) => {
+        const errorMsg = err.response?.data.errors[0].message
         setIsCooldown()
         setVariant('danger')
-        if (err.response?.status === 422) {
-          setAlertMsg(errrorMsg)
+        console.log(err)
+        if (errorMsg === NAME_TAKEN_PRODUCT_ERROR_MSG || errorMsg === NAME_TAKEN_CATEGORY_ERROR_MSG) {
+          setAlertMsg('This name already exists!')
+          return
+        }
+        if (errorMsg === NAME_TOO_LONG_ERROR_MSG) {
+          setAlertMsg('Name is too long!')
           return
         }
         setAlertMsg('Something went wrong!')

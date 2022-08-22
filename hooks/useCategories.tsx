@@ -3,7 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { API_URL } from '../constants/api'
 import { customFetch } from '../helpers/fetch'
 
-import type { Category } from '../types'
+interface Category {
+  readonly id: number
+  readonly name: string
+  readonly status: string
+  readonly uid: string
+  readonly updated_at: string
+}
 
 export const useCategories = () => {
   const { data, isError } = useQuery(['categories'], () =>
