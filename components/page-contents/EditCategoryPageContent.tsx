@@ -7,6 +7,7 @@ import { CATEGORIES_PATH } from '../../constants/paths'
 import { useCategories } from '../../hooks/useCategories'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
+import { Button } from '../shared/Button'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
@@ -20,7 +21,8 @@ export const EditCategoryPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate()
+  const { alertMsg, handleDelete, handleUpdate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } =
+    useUpdate()
 
   const currentCategory = categories.find(c => c.id.toString() === id)
 
@@ -41,7 +43,7 @@ export const EditCategoryPageContent = () => {
       return
     }
 
-    update({
+    handleUpdate({
       path: `${API_URL}/ajax/219/product_categories/${id}`,
       body: {
         name: categoryInputRef.current.value
@@ -50,9 +52,13 @@ export const EditCategoryPageContent = () => {
     })
   }
 
-  const handleDelete = () => {
-    update({ path: `${API_URL}/ajax/219/product_categories/${id}`, method: 'delete', successMsg: 'Category deleted, redirecting...' })
-    setTimeout(() => void push(CATEGORIES_PATH), 1000)
+  const deleteCategory = () => {
+    void handleDelete({
+      path: `${API_URL}/ajax/219/product_categories/${id}`,
+      successMsg: 'Category deleted, redirecting...',
+      errorMsg: 'Cannot delete category!',
+      cb: () => setTimeout(() => void push(CATEGORIES_PATH), 1000)
+    })
   }
 
   return (
@@ -76,12 +82,10 @@ export const EditCategoryPageContent = () => {
               <label htmlFor='name'>Category name</label>
             </div>
             <div className='d-flex justify-content-center gap-2'>
-              <button type='submit' className='btn btn-primary'>
-                Submit
-              </button>
-              <button type='button' onClick={handleDelete} className='btn btn-primary'>
+              <Button type='submit'>Submit</Button>
+              <Button type='button' onClick={deleteCategory}>
                 Delete
-              </button>
+              </Button>
             </div>
           </form>
         </>

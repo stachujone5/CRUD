@@ -9,7 +9,7 @@ import { MdOutlineCreateNewFolder } from 'react-icons/md'
 
 import { ADD_PATH, CATEGORIES_PATH, INDEX_PATH, PRODUCTS_PATH } from '../../constants/paths'
 import { useProducts } from '../../hooks/useProducts'
-import logo from '../../public/image.webp'
+import logo from '../../public/logo.webp'
 
 import type { ChangeEvent } from 'react'
 

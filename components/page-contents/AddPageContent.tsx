@@ -5,6 +5,7 @@ import { API_URL } from '../../constants/api'
 import { useCategories } from '../../hooks/useCategories'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
+import { Button } from '../shared/Button'
 import { Container } from '../shared/Container'
 
 import type { FormEvent } from 'react'
@@ -16,7 +17,7 @@ export const AddPageContent = () => {
 
   const { categories } = useCategories()
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate()
+  const { alertMsg, handleCreate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } = useUpdate()
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -39,7 +40,7 @@ export const AddPageContent = () => {
       return
     }
 
-    update({
+    handleCreate({
       path: `${API_URL}/ajax/219/products`,
       body: {
         name: productInputRef.current.value,
@@ -50,7 +51,6 @@ export const AddPageContent = () => {
         category_id: category.id,
         tax_id: 1
       },
-      method: 'post',
       successMsg: 'Product added!'
     })
 
@@ -67,12 +67,11 @@ export const AddPageContent = () => {
       return
     }
 
-    update({
+    handleCreate({
       path: `${API_URL}/ajax/219/product_categories`,
       body: {
         name: categoryInputRef.current.value
       },
-      method: 'post',
       successMsg: 'Category added!'
     })
 
@@ -99,18 +98,18 @@ export const AddPageContent = () => {
               </option>
             ))}
           </select>
-          <button type='submit' className='btn btn-primary px-5 mt-2'>
+          <Button type='submit' className='px-5 mt-2'>
             Add product
-          </button>
+          </Button>
         </form>
         <form onSubmit={handleCategorySubmit}>
           <div className='form-floating mb-3 text-start'>
             <input className='form-control' id='category' placeholder='Category' ref={categoryInputRef} />
             <label htmlFor='category'>Category name</label>
           </div>
-          <button type='submit' className='btn btn-primary px-5 mt-2'>
+          <Button type='submit' className='px-5 mt-2'>
             Add category
-          </button>
+          </Button>
         </form>
       </div>
       {isCooldown && (

@@ -3,14 +3,9 @@ import Link from 'next/link'
 
 import { INDEX_PATH } from '../../constants/paths'
 
-import type { Children } from '../../types'
+import type { AnchorHTMLAttributes } from 'react'
 
-interface Props extends Children {
-  readonly className?: string
-  readonly href?: string
-}
-
-export const LinkButton = ({ children, className, href = INDEX_PATH }: Props) => {
+export const LinkButton = ({ children, className, href = INDEX_PATH }: AnchorHTMLAttributes<HTMLAnchorElement>) => {
   const classes = clsx('btn btn-primary p-3', className)
 
   return (

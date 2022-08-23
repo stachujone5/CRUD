@@ -8,6 +8,7 @@ import { useCategories } from '../../hooks/useCategories'
 import { useProducts } from '../../hooks/useProducts'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
+import { Button } from '../shared/Button'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
@@ -17,7 +18,8 @@ export const EditProductPageContent = () => {
   const productInputRef = useRef<HTMLInputElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
 
-  const { alertMsg, isCooldown, setAlertMsg, setIsCooldown, setVariant, update, variant } = useUpdate()
+  const { alertMsg, handleDelete, handleUpdate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } =
+    useUpdate()
   const { categories } = useCategories()
   const { isError, products } = useProducts()
   const { push, query } = useRouter()
@@ -48,7 +50,7 @@ export const EditProductPageContent = () => {
       return
     }
 
-    update({
+    handleUpdate({
       path: `${API_URL}/ajax/219/products/${id}`,
       body: {
         measure_type: currentProduct.measure_type,
@@ -61,13 +63,12 @@ export const EditProductPageContent = () => {
     })
   }
 
-  const handleDelete = () => {
-    update({
+  const deleteProduct = () => {
+    void handleDelete({
       path: `${API_URL}/ajax/219/products/${id}`,
-      method: 'delete',
-      successMsg: 'Product deleted, redirecting...'
+      successMsg: 'Product deleted, redirecting...',
+      cb: () => setTimeout(() => void push(PRODUCTS_PATH), 1000)
     })
-    setTimeout(() => void push(PRODUCTS_PATH), 1000)
   }
 
   return (
@@ -99,12 +100,12 @@ export const EditProductPageContent = () => {
               ))}
             </select>
             <div className='d-flex justify-content-center gap-2'>
-              <button type='submit' className='px-5 btn btn-primary'>
+              <Button type='submit' className='px-5'>
                 Submit
-              </button>
-              <button type='button' onClick={handleDelete} className='px-5 btn btn-primary'>
+              </Button>
+              <Button type='button' onClick={deleteProduct} className='px-5'>
                 Delete
-              </button>
+              </Button>
             </div>
           </form>
         </>
