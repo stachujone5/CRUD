@@ -10,8 +10,8 @@ export const HomePageContent = () => {
       <Head>
         <title>Home</title>
       </Head>
-      <h1 className='mb-4'>GoPOS recruitment task</h1>
-      <LinkButton href={PRODUCTS_PATH}>Browse our products!</LinkButton>
+      <h1 className='mb-5'>GoPOS recruitment task</h1>
+      <LinkButton href={PRODUCTS_PATH}>Browse products</LinkButton>
     </Container>
   )
 }

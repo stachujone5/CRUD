@@ -14,7 +14,7 @@ import logo from '../../public/logo.webp'
 import type { ChangeEvent } from 'react'
 
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
@@ -24,7 +24,7 @@ export const Header = () => {
     ? products.filter(p => p.name.toLowerCase().includes(inputValue.toLowerCase()))
     : []
 
-  const collapseClasses = clsx('navbar-collapse ms-lg-5', !isOpen && 'd-none')
+  const collapseClasses = clsx('navbar-collapse ms-lg-5', !isNavOpen && 'd-none')
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
@@ -39,7 +39,7 @@ export const Header = () => {
               <Image src={logo} alt='GoPOS logo' />
             </div>
           </Link>
-          <button className='navbar-toggler' aria-label='Toggle navigation' onClick={() => setIsOpen(prev => !prev)}>
+          <button className='navbar-toggler' aria-label='Toggle navigation' onClick={() => setIsNavOpen(prev => !prev)}>
             <GiHamburgerMenu className='navbar-toggler-icon' />
           </button>
           <div className={collapseClasses}>
