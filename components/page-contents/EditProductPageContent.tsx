@@ -64,7 +64,7 @@ export const EditProductPageContent = () => {
   }
 
   const deleteProduct = () => {
-    void handleDelete({
+    handleDelete({
       path: `${API_URL}/ajax/219/products/${id}`,
       successMsg: 'Product deleted, redirecting...',
       cb: () => setTimeout(() => void push(PRODUCTS_PATH), 1000)

@@ -31,7 +31,7 @@ export const useUpdate = <BodyType,>() => {
 
   const headers = { Authorization: authorization }
 
-  const isError = (err?: Error) => {
+  const isError = (errorMsg: string, err?: Error) => {
     const error = err?.errors?.[0].message
 
     if (error === NAME_TAKEN_PRODUCT_ERROR_MSG || error === NAME_TAKEN_CATEGORY_ERROR_MSG) {
@@ -42,6 +42,7 @@ export const useUpdate = <BodyType,>() => {
       setAlertMsg('Name is too long!')
       return
     }
+    setAlertMsg(errorMsg)
   }
 
   const handleDelete = ({
@@ -50,7 +51,7 @@ export const useUpdate = <BodyType,>() => {
     path,
     successMsg = 'Success'
   }: Omit<Props, 'body'>) => {
-    return axios
+    axios
       .delete(path, { headers })
       .then(() => {
         setIsCooldown()
@@ -65,35 +66,47 @@ export const useUpdate = <BodyType,>() => {
       })
   }
 
-  const handleUpdate = ({ body, errorMsg = 'Something went wrong', path, successMsg = 'Success' }: Props<BodyType>) => {
+  const handleUpdate = ({
+    body,
+    cb,
+    errorMsg = 'Something went wrong',
+    path,
+    successMsg = 'Success'
+  }: Props<BodyType>) => {
     axios
       .put(path, body, { headers })
       .then(() => {
         setIsCooldown()
         setVariant('success')
         setAlertMsg(successMsg)
+        cb?.()
       })
       .catch((err: AxiosError<Error>) => {
         setIsCooldown()
         setVariant('danger')
-        isError(err.response?.data)
-        setAlertMsg(errorMsg)
+        isError(errorMsg, err.response?.data)
       })
   }
 
-  const handleCreate = ({ body, errorMsg = 'Something went wrong', path, successMsg = 'Success' }: Props<BodyType>) => {
+  const handleCreate = ({
+    body,
+    cb,
+    errorMsg = 'Something went wrong',
+    path,
+    successMsg = 'Success'
+  }: Props<BodyType>) => {
     axios
       .post(path, body, { headers })
       .then(() => {
         setIsCooldown()
         setVariant('success')
         setAlertMsg(successMsg)
+        cb?.()
       })
       .catch((err: AxiosError<Error>) => {
         setIsCooldown()
         setVariant('danger')
-        isError(err.response?.data)
-        setAlertMsg(errorMsg)
+        isError(errorMsg, err.response?.data)
       })
   }
 

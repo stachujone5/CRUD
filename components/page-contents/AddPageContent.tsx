@@ -51,11 +51,14 @@ export const AddPageContent = () => {
         category_id: category.id,
         tax_id: 1
       },
-      successMsg: 'Product added!'
+      successMsg: 'Product added!',
+      cb: () => {
+        if (productInputRef.current && productSelectRef.current) {
+          productInputRef.current.value = ''
+          productSelectRef.current.selectedIndex = 0
+        }
+      }
     })
-
-    productInputRef.current.value = ''
-    productSelectRef.current.selectedIndex = 0
   }
   const handleCategorySubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -72,10 +75,13 @@ export const AddPageContent = () => {
       body: {
         name: categoryInputRef.current.value
       },
-      successMsg: 'Category added!'
+      successMsg: 'Category added!',
+      cb: () => {
+        if (categoryInputRef.current) {
+          categoryInputRef.current.value = ''
+        }
+      }
     })
-
-    categoryInputRef.current.value = ''
   }
 
   return (
