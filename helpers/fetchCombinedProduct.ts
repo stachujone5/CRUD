@@ -22,7 +22,7 @@ export const fetchCombinedProduct = async (id: string) => {
       }
     )
     return { ...product.data.data, category: category.data.data.name }
-  } catch {
+  } catch (err) {
     throw new Error('Failed to fetch!')
   }
 }

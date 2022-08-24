@@ -12,7 +12,7 @@ export const fetchProducts = async () => {
       headers: { Authorization: authorization }
     })
     return category.data.data
-  } catch {
+  } catch (err) {
     throw new Error('Failed to fetch!')
   }
 }

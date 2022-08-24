@@ -12,7 +12,7 @@ export const fetchSingleCategory = async (id: string) => {
       headers: { Authorization: authorization }
     })
     return { ...category.data.data }
-  } catch {
+  } catch (err) {
     throw new Error('Failed to fetch!')
   }
 }
