@@ -14,7 +14,7 @@ export const SingleProductPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { data: product, isError, isLoading } = useQuery(['combinedProduct'], () => fetchCombinedProduct(id))
+  const { data: product, isError, isLoading } = useQuery(['combinedProduct', id], () => fetchCombinedProduct(id))
 
   if (isLoading) {
     return <Loading />

@@ -22,7 +22,7 @@ export const EditCategoryPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { data: category, isError, isLoading } = useQuery(['category'], () => fetchSingleCategory(id))
+  const { data: category, isError, isLoading } = useQuery(['category', id], () => fetchSingleCategory(id))
 
   const { alertMsg, handleDelete, handleUpdate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } =
     useUpdate()

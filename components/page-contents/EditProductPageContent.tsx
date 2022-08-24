@@ -31,12 +31,12 @@ export const EditProductPageContent = () => {
     data: product,
     isError: isErrorProduct,
     isLoading: isLoadingProduct
-  } = useQuery(['combinedProduct'], () => fetchCombinedProduct(id))
+  } = useQuery(['combinedProduct', id], () => fetchCombinedProduct(id))
   const {
     data: categories,
     isError: isErrorCategories,
     isLoading: isLoadingCategories
-  } = useQuery(['categories'], () => fetchCategories())
+  } = useQuery(['categories', id], () => fetchCategories())
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (!product || !productSelectRef.current) return
