@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { API_URL } from '../constants/api'
 
-import type { Product } from './../pages/products/index'
+import type { Product } from '../types'
 
 export const fetchProducts = async () => {
   // eslint-disable-next-line -- it exists

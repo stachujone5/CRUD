@@ -2,10 +2,9 @@ import axios from 'axios'
 
 import { API_URL } from '../constants/api'
 
-import type { Category } from '../pages/categories'
-import type { Product } from '../pages/products'
+import type { Category, Product } from '../types'
 
-export const fetchCombinedProduct = async (id: string) => {
+export const fetchSingleCombinedProduct = async (id: string) => {
   // eslint-disable-next-line -- it exists
   const authorization = process.env.NEXT_PUBLIC_AUTHORIZATION!
   try {

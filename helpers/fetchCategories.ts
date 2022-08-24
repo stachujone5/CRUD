@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { API_URL } from '../constants/api'
 
-import type { Category } from '../pages/categories'
+import type { Category } from '../types'
 
 export const fetchCategories = async () => {
   // eslint-disable-next-line -- it exists

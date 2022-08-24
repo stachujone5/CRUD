@@ -6,7 +6,7 @@ import { useRef } from 'react'
 import { API_URL } from '../../constants/api'
 import { PRODUCTS_PATH } from '../../constants/paths'
 import { fetchCategories } from '../../helpers/fetchCategories'
-import { fetchCombinedProduct } from '../../helpers/fetchCombinedProduct'
+import { fetchSingleCombinedProduct } from '../../helpers/fetchSingleCombinedProduct'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
@@ -31,12 +31,12 @@ export const EditProductPageContent = () => {
     data: product,
     isError: isErrorProduct,
     isLoading: isLoadingProduct
-  } = useQuery(['combinedProduct', id], () => fetchCombinedProduct(id))
+  } = useQuery(['combinedProduct', id], () => fetchSingleCombinedProduct(id))
   const {
     data: categories,
     isError: isErrorCategories,
     isLoading: isLoadingCategories
-  } = useQuery(['categories', id], () => fetchCategories())
+  } = useQuery(['categories', id], fetchCategories)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (!product || !productSelectRef.current) return

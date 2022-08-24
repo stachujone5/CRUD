@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import { PRODUCTS_PATH } from '../../constants/paths'
-import { fetchCombinedProduct } from '../../helpers/fetchCombinedProduct'
+import { fetchSingleCombinedProduct } from '../../helpers/fetchSingleCombinedProduct'
 import { Container } from '../shared/Container'
 import { LinkButton } from '../shared/LinkButton'
 import { Loading } from '../shared/Loading'
@@ -14,7 +14,7 @@ export const SingleProductPageContent = () => {
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
 
-  const { data: product, isError, isLoading } = useQuery(['combinedProduct', id], () => fetchCombinedProduct(id))
+  const { data: product, isError, isLoading } = useQuery(['combinedProduct', id], () => fetchSingleCombinedProduct(id))
 
   if (isLoading) {
     return <Loading />
