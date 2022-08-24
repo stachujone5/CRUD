@@ -19,9 +19,11 @@ export const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
-  const { pathname } = useRouter()
+  const { pathname, query } = useRouter()
 
-  const { data } = useQuery(['products'], () => fetchProducts())
+  const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
+
+  const { data } = useQuery(['products', id], () => fetchProducts())
 
   const matchingProducs = inputValue ? data?.filter(p => p.name.toLowerCase().includes(inputValue.toLowerCase())) : []
 
