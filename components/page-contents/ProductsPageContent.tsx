@@ -1,14 +1,18 @@
 import Head from 'next/head'
 
 import { PRODUCTS_PATH } from '../../constants/paths'
-import { useProducts } from '../../hooks/useProducts'
 import { Card } from '../shared/Card'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
-export const ProductsPageContent = () => {
-  const { isError, products } = useProducts()
+import type { CombinedProduct } from '../../pages/products'
 
+interface Props {
+  readonly isError: boolean
+  readonly products: readonly CombinedProduct[]
+}
+
+export const ProductsPageContent = ({ isError, products }: Props) => {
   return (
     <Container>
       <Head>

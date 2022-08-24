@@ -1,14 +1,18 @@
 import Head from 'next/head'
 
 import { CATEGORIES_PATH } from '../../constants/paths'
-import { useCategories } from '../../hooks/useCategories'
 import { Card } from '../shared/Card'
 import { Container } from '../shared/Container'
 import { Message } from '../shared/Message'
 
-export const CategoriesPageContent = () => {
-  const { categories, isError } = useCategories()
+import type { Category } from '../../pages/categories'
 
+interface Props {
+  readonly categories: readonly Category[]
+  readonly isError: boolean
+}
+
+export const CategoriesPageContent = ({ categories, isError }: Props) => {
   return (
     <Container>
       <Head>

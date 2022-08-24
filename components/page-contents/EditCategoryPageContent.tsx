@@ -1,14 +1,16 @@
+import { useQuery } from '@tanstack/react-query'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { CATEGORIES_PATH } from '../../constants/paths'
-import { useCategories } from '../../hooks/useCategories'
+import { fetchSingleCategory } from '../../helpers/fetchSingleCategory'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
 import { Container } from '../shared/Container'
+import { Loading } from '../shared/Loading'
 import { Message } from '../shared/Message'
 
 import type { FormEvent } from 'react'
@@ -17,19 +19,18 @@ export const EditCategoryPageContent = () => {
   const categoryInputRef = useRef<HTMLInputElement>(null)
 
   const { push, query } = useRouter()
-  const { categories, isError } = useCategories()
 
   const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
+
+  const { data: category, isError, isLoading } = useQuery(['category'], () => fetchSingleCategory(id))
 
   const { alertMsg, handleDelete, handleUpdate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } =
     useUpdate()
 
-  const currentCategory = categories.find(c => c.id.toString() === id)
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (categoryInputRef.current?.value.trim() === currentCategory?.name) {
+    if (categoryInputRef.current?.value.trim() === category?.name) {
       setAlertMsg('Update category info!')
       setVariant('danger')
       setIsCooldown()
@@ -61,13 +62,18 @@ export const EditCategoryPageContent = () => {
     })
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <Container>
       <Head>
-        <title>Edit category</title>
+        <title>{isError ? 'Error' : 'Edit category'}</title>
       </Head>
-      {isError && <Message className='text-danger'>Couldn't fetch category!</Message>}
-      {currentCategory && (
+      {isError ? (
+        <Message className='text-danger'>Couldn't fetch category!</Message>
+      ) : (
         <>
           <h1 className='mb-5'>Edit category</h1>
           <form className='mx-auto' style={{ maxWidth: '18rem' }} onSubmit={handleSubmit}>
@@ -77,7 +83,7 @@ export const EditCategoryPageContent = () => {
                 id='name'
                 placeholder='Edit category'
                 ref={categoryInputRef}
-                defaultValue={currentCategory.name}
+                defaultValue={category.name}
               />
               <label htmlFor='name'>Category name</label>
             </div>

@@ -10,7 +10,7 @@ export const Custom404PageContent = () => {
       <Head>
         <title>Not found!</title>
       </Head>
-      <h1 className='mb-3'>Page not found!</h1>
+      <h1 className='mb-5'>Page not found!</h1>
       <LinkButton href={INDEX_PATH}>Go back to home page</LinkButton>
     </Container>
   )

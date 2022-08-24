@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,7 +9,7 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { MdOutlineCreateNewFolder } from 'react-icons/md'
 
 import { ADD_PATH, CATEGORIES_PATH, INDEX_PATH, PRODUCTS_PATH } from '../../constants/paths'
-import { useProducts } from '../../hooks/useProducts'
+import { fetchProducts } from '../../helpers/fetchProducts'
 import logo from '../../public/logo.webp'
 
 import type { ChangeEvent } from 'react'
@@ -18,11 +19,11 @@ export const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
-  const { products } = useProducts()
   const { pathname } = useRouter()
-  const matchingProducs = inputValue
-    ? products.filter(p => p.name.toLowerCase().includes(inputValue.toLowerCase()))
-    : []
+
+  const { data } = useQuery(['products'], () => fetchProducts())
+
+  const matchingProducs = inputValue ? data?.filter(p => p.name.toLowerCase().includes(inputValue.toLowerCase())) : []
 
   const collapseClasses = clsx('navbar-collapse ms-lg-5', !isNavOpen && 'd-none')
 
@@ -97,7 +98,7 @@ export const Header = () => {
               />
               {isSearchOpen && (
                 <ul className='position-absolute list-group w-100 mt-2'>
-                  {matchingProducs.map(p => (
+                  {matchingProducs?.map(p => (
                     <Link key={p.id} href={`${PRODUCTS_PATH}/${p.id}`}>
                       <a className='d-block list-group-item' onClick={() => setInputValue('')}>
                         {p.name}
