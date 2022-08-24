@@ -18,7 +18,7 @@ export const AddPageContent = () => {
   const productSelectRef = useRef<HTMLSelectElement>(null)
   const categoryInputRef = useRef<HTMLInputElement>(null)
 
-  const { data: categories, isError, isLoading } = useQuery(['categories'], () => fetchCategories())
+  const { data: categories, isError, isLoading, refetch } = useQuery(['categories'], () => fetchCategories())
   const { alertMsg, handleCreate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } = useUpdate()
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -82,6 +82,7 @@ export const AddPageContent = () => {
         if (categoryInputRef.current) {
           categoryInputRef.current.value = ''
         }
+        void refetch()
       }
     })
   }
