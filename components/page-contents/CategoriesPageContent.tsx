@@ -22,7 +22,7 @@ export const CategoriesPageContent = () => {
   return (
     <Container>
       <Head>
-        <title>Categories</title>
+        <title>{isError ? 'Error' : 'Categories'}</title>
       </Head>
       <h1 className='mb-5'>Categories</h1>
       <div className='d-flex justify-content-center flex-wrap gap-4'>

@@ -33,11 +33,17 @@ export const SingleCategoryPageContent = () => {
           <div className='mx-auto card' style={{ maxWidth: '22rem' }}>
             <h5 className='card-header'>{category.name}</h5>
             <div className='card-body'>
-              <h5 className='card-title'>ID: {category.id}</h5>
-              <p className='list-group-item'>Updated at: {new Date(category.updated_at).toLocaleDateString()}</p>
-              <LinkButton className='w-100' href={`${CATEGORIES_PATH}/${id}/edit`}>
-                Edit
-              </LinkButton>
+              {category.status === 'DELETED' ? (
+                <Message className='mt-5 text-danger'>This category was deleted!</Message>
+              ) : (
+                <>
+                  <h5 className='card-title'>ID: {category.id}</h5>
+                  <p className='list-group-item'>Updated at: {new Date(category.updated_at).toLocaleDateString()}</p>
+                  <LinkButton className='w-100' href={`${CATEGORIES_PATH}/${id}/edit`}>
+                    Edit
+                  </LinkButton>
+                </>
+              )}
             </div>
           </div>
         </>

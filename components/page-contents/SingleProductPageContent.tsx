@@ -34,15 +34,21 @@ export const SingleProductPageContent = () => {
           <div className='mx-auto card' style={{ maxWidth: '22rem' }}>
             <h5 className='card-header'>{product.name}</h5>
             <div className='card-body'>
-              <h5 className='card-title'>{product.category}</h5>
-              <ul className='list-group list-group-flush mb-2'>
-                <li className='list-group-item'>ProductID: {product.id}</li>
-                <li className='list-group-item'>CategoryID: {product.category_id}</li>
-                <li className='list-group-item'>Updated at: {new Date(product.updated_at).toLocaleDateString()}</li>
-              </ul>
-              <LinkButton className='w-100' href={`${PRODUCTS_PATH}/${id}/edit`}>
-                Edit
-              </LinkButton>
+              {product.status === 'DELETED' ? (
+                <Message className='mt-5 text-danger'>This product was deleted!</Message>
+              ) : (
+                <>
+                  <h5 className='card-title'>{product.category}</h5>
+                  <ul className='list-group list-group-flush mb-2'>
+                    <li className='list-group-item'>ProductID: {product.id}</li>
+                    <li className='list-group-item'>CategoryID: {product.category_id}</li>
+                    <li className='list-group-item'>Updated at: {new Date(product.updated_at).toLocaleDateString()}</li>
+                  </ul>
+                  <LinkButton className='w-100' href={`${PRODUCTS_PATH}/${id}/edit`}>
+                    Edit
+                  </LinkButton>
+                </>
+              )}
             </div>
           </div>
         </>

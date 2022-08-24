@@ -42,7 +42,7 @@ export const ProductsPageContent = () => {
   return (
     <Container>
       <Head>
-        <title>Products</title>
+        <title>{isErrorCategories || isErrorProducts ? 'Error' : 'Products'}</title>
       </Head>
       <h1 className='mb-5'>Products</h1>
       <div className='d-flex justify-content-center flex-wrap gap-4'>
