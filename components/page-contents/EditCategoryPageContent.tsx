@@ -6,6 +6,7 @@ import { useRef } from 'react'
 import { API_URL } from '../../constants/api'
 import { CATEGORIES_PATH } from '../../constants/paths'
 import { fetchSingleCategory } from '../../helpers/fetchSingleCategory'
+import { revalidate } from '../../helpers/revalidate'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
@@ -49,7 +50,8 @@ export const EditCategoryPageContent = () => {
       body: {
         name: categoryInputRef.current.value
       },
-      successMsg: 'Category edited!'
+      successMsg: 'Category edited!',
+      cb: () => revalidate()
     })
   }
 
@@ -58,7 +60,10 @@ export const EditCategoryPageContent = () => {
       path: `${API_URL}/ajax/219/product_categories/${id}`,
       successMsg: 'Category deleted, redirecting...',
       errorMsg: 'Cannot delete category!',
-      cb: () => setTimeout(() => void push(CATEGORIES_PATH), 1000)
+      cb: () => {
+        revalidate()
+        setTimeout(() => void push(CATEGORIES_PATH), 1000)
+      }
     })
   }
 

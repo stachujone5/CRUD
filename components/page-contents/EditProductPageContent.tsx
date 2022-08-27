@@ -7,6 +7,7 @@ import { API_URL } from '../../constants/api'
 import { PRODUCTS_PATH } from '../../constants/paths'
 import { fetchCategories } from '../../helpers/fetchCategories'
 import { fetchSingleCombinedProduct } from '../../helpers/fetchSingleCombinedProduct'
+import { revalidate } from '../../helpers/revalidate'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
@@ -69,7 +70,8 @@ export const EditProductPageContent = () => {
         name: productInputRef.current.value,
         category_id: productSelectRef.current.value
       },
-      successMsg: 'Product edited!'
+      successMsg: 'Product edited!',
+      cb: () => revalidate()
     })
   }
 
@@ -77,7 +79,10 @@ export const EditProductPageContent = () => {
     handleDelete({
       path: `${API_URL}/ajax/219/products/${id}`,
       successMsg: 'Product deleted, redirecting...',
-      cb: () => setTimeout(() => void push(PRODUCTS_PATH), 1000)
+      cb: () => {
+        revalidate()
+        setTimeout(() => void push(PRODUCTS_PATH), 1000)
+      }
     })
   }
 

@@ -4,6 +4,7 @@ import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { fetchCategories } from '../../helpers/fetchCategories'
+import { revalidate } from '../../helpers/revalidate'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
@@ -18,7 +19,7 @@ export const AddPageContent = () => {
   const productSelectRef = useRef<HTMLSelectElement>(null)
   const categoryInputRef = useRef<HTMLInputElement>(null)
 
-  const { data: categories, isError, isLoading, refetch } = useQuery(['categories'], () => fetchCategories())
+  const { data: categories, isError, isLoading, refetch } = useQuery(['categories'], fetchCategories)
   const { alertMsg, handleCreate, isCooldown, setAlertMsg, setIsCooldown, setVariant, variant } = useUpdate()
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -55,6 +56,7 @@ export const AddPageContent = () => {
       },
       successMsg: 'Product added!',
       cb: () => {
+        revalidate()
         if (productInputRef.current && productSelectRef.current) {
           productInputRef.current.value = ''
           productSelectRef.current.selectedIndex = 0
@@ -79,6 +81,7 @@ export const AddPageContent = () => {
       },
       successMsg: 'Category added!',
       cb: () => {
+        revalidate()
         if (categoryInputRef.current) {
           categoryInputRef.current.value = ''
         }
