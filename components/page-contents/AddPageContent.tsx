@@ -4,7 +4,6 @@ import { useRef } from 'react'
 
 import { API_URL } from '../../constants/api'
 import { fetchCategories } from '../../helpers/fetchCategories'
-import { revalidate } from '../../helpers/revalidate'
 import { useUpdate } from '../../hooks/useUpdate'
 import { Alert } from '../shared/Alert'
 import { Button } from '../shared/Button'
@@ -56,7 +55,6 @@ export const AddPageContent = () => {
       },
       successMsg: 'Product added!',
       cb: () => {
-        revalidate()
         if (productInputRef.current && productSelectRef.current) {
           productInputRef.current.value = ''
           productSelectRef.current.selectedIndex = 0
@@ -81,7 +79,6 @@ export const AddPageContent = () => {
       },
       successMsg: 'Category added!',
       cb: () => {
-        revalidate()
         if (categoryInputRef.current) {
           categoryInputRef.current.value = ''
         }

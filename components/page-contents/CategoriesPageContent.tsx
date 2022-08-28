@@ -1,13 +1,24 @@
+import { useQuery } from '@tanstack/react-query'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import { CATEGORIES_PATH } from '../../constants/paths'
+import { fetchCategories } from '../../helpers/fetchCategories'
 import { Card } from '../shared/Card'
 import { Container } from '../shared/Container'
+import { Loading } from '../shared/Loading'
 import { Message } from '../shared/Message'
 
-import type { CategoriesPageProps } from '../../pages/categories'
+export const CategoriesPageContent = () => {
+  const { query } = useRouter()
 
-export const CategoriesPageContent = ({ categories, isError }: CategoriesPageProps) => {
+  const id = typeof query.id !== 'object' && typeof query.id !== 'undefined' ? query.id : ''
+
+  const { data: categories, isError, isLoading } = useQuery(['categories', id], fetchCategories)
+
+  if (isLoading) {
+    return <Loading />
+  }
   return (
     <Container>
       <Head>
