@@ -1,15 +1,16 @@
 GoPOS recruitment Task
 
-App predicts your potential gender and nationality based on your name
+CRUD application connected to GoPOS API.
 
 ## [Live demo](https://recruitment-task-rho.vercel.app/)
 
 Built using:
-* React 
-* Typescript
-* NextJS
-* Axios & React Query 
-* Bootstrap 
+
+- React
+- Typescript
+- NextJS
+- Axios & React Query
+- Bootstrap
 
 To run the app type:
 
@@ -18,7 +19,8 @@ npm install
 # or
 yarn
 ```
-Then run the development server: 
+
+Then run the development server:
 
 ```bash
 npm run dev
@@ -27,4 +29,3 @@ yarn dev
 ```
 
 Enjoy!
-
